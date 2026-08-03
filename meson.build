@@ -21,6 +21,12 @@ want_static = get_option('link_mode') == 'static'
 if (library_kind == 'static') != want_static
   error('default_library and link_mode must both select shared or static')
 endif
+cpp = meson.get_compiler('cpp')
+visibility_cpp_args = []
+if cpp.has_argument('-fvisibility-inlines-hidden')
+  visibility_cpp_args += ['-fvisibility-inlines-hidden']
+endif
+
 pkgconf = import('pkgconfig')
 libpkgstate_dep = dependency(
   'libpkgstate',

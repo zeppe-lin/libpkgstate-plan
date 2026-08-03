@@ -1,5 +1,18 @@
 # Integration
 
-Link `libpkgstate-plan` only at the composition point that must cross this exact authority boundary. The adapter returns immutable values and performs no hidden I/O.
+Construct `planning_target_context` in orchestration, where complete target
+context is available, and bind it to the exact durable state projection for the
+snapshot being planned. Then project once and pass the resulting planner-owned
+facts to `libpkgplan`.
 
-The repository requires the 3.0 `libpkgstate` owner generation. It must be released after its authority dependencies and before any orchestrator that consumes the bridge.
+```text
+state store read -> snapshot --+
+                               +-> libpkgstate-plan -> libpkgplan inputs
+caller target context ----------+
+```
+
+Do not ask the adapter to infer target context from the host or to perform
+resolution. Link it only in the planning composition layer.
+
+Release `libpkgimage` 0.4.0 and `libpkgplan` 0.3.0 before building the planner
+closure, then release `libpkgstate` 3.0.0 and finally `libpkgstate-plan` 3.0.0.

@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <libpkgstate-plan/export.h>
+
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -29,7 +31,7 @@ enum class projection_error_code {
 };
 
 /*! \brief Failure to project canonical state into planner-owned fact types. */
-class projection_error final : public std::invalid_argument {
+class PKGSTATE_PLAN_API projection_error final : public std::invalid_argument {
 public:
   /*! \brief Construct a typed projection failure. */
   projection_error(projection_error_code code, std::string message);
@@ -48,7 +50,7 @@ private:
  * installed snapshot.  The caller supplies that context identity together with
  * the exact durable state projection it claims belongs to the context.
  */
-class planning_target_context final {
+class PKGSTATE_PLAN_API planning_target_context final {
 public:
   /*! \brief Bind a planner context to its durable state projection. */
   planning_target_context(
@@ -77,7 +79,7 @@ private:
  * vocabulary. Hard-link topology remains state-owned because libpkgplan has
  * no corresponding object-metadata field.
  */
-class installed_state_projection final {
+class PKGSTATE_PLAN_API installed_state_projection final {
 public:
   /*! \brief Return the caller-authoritative complete target context. */
   [[nodiscard]] const pkgplan::target_system_context_identity&
@@ -92,7 +94,7 @@ public:
   ownership() const noexcept;
 
 private:
-  friend installed_state_projection project_installed_state(
+  friend PKGSTATE_PLAN_API installed_state_projection project_installed_state(
       const snapshot&, const planning_target_context&);
 
   installed_state_projection(
@@ -115,7 +117,7 @@ private:
  *
  * \throws projection_error when the target or vocabularies disagree.
  */
-[[nodiscard]] installed_state_projection
+[[nodiscard]] PKGSTATE_PLAN_API installed_state_projection
 project_installed_state(const snapshot& state,
                         const planning_target_context& target);
 
