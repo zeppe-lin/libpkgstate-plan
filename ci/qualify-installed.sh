@@ -25,6 +25,13 @@ int main() { return 0; }
   # shellcheck disable=SC2046
   ${CXX:-c++} -std=c++17 -Wall -Wextra -Wpedantic -Werror -fsyntax-only $(pkg-config --cflags libpkgstate-plan) "$tmp/header.cpp"
 done
+documentation_dir="$install_prefix/share/doc/libpkgstate-plan"
+for document in README.md HISTORY.md CONTRIBUTING.md MAINTAINING.md architecture.md integration.md testing.md abi.md code-style.md; do
+  test -s "$documentation_dir/$document" || {
+    echo "installed documentation is absent: $document" >&2
+    exit 1
+  }
+done
 case $link_mode in
   shared) "$(dirname "$0")/audit-shared-boundary.sh" "$install_prefix/lib/libpkgstate-plan.so.3.0.0" ;;
   static) test -f "$install_prefix/lib/libpkgstate-plan.a" ;;
