@@ -16,3 +16,8 @@ done
 grep -F -- 'repository: zeppe-lin/libpkgplan' "$workflow" >/dev/null || fail 'missing dependency pin: repository: zeppe-lin/libpkgplan'
 grep -F -- 'ref: v0.3.0' "$workflow" >/dev/null || fail 'missing dependency pin: ref: v0.3.0'
 grep -F -- 'repository: zeppe-lin/libpkgstate' "$workflow" >/dev/null || fail 'missing dependency pin: repository: zeppe-lin/libpkgstate'
+
+grep -F 'html: enabled' "$root/.github/workflows/ci.yml" >/dev/null || fail 'GCC shared HTML build is absent'
+grep -F 'pandoc' "$root/.github/workflows/ci.yml" >/dev/null || fail 'Pandoc qualification dependency is absent'
+grep -F -- '-Dhtml_docs=' "$root/.github/workflows/ci.yml" >/dev/null || fail 'HTML Meson feature is not configured'
+grep -F 'qualify-html-docs.sh' "$root/.github/workflows/ci.yml" >/dev/null || fail 'installed HTML qualification is absent'
