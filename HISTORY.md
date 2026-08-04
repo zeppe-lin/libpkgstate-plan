@@ -9,3 +9,4 @@
 - Completed the documented public projection contract under Doxygen warnings-as-errors.
 - Renamed the installed manual from the former in-tree adapter name to `libpkgstate-plan.3`.
 - Centralized durable source-control projection so downstream adapters do not recreate planner vocabulary.
+- Qualified planner projection against package-source-record protocol version 2 without retired recipe identity.
