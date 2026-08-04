@@ -10,19 +10,22 @@
 
 #include <libpkgstate-plan/export.h>
 
+#include <cstdint>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
+#include <libpkgplan/control.h>
 #include <libpkgplan/digest.h>
 #include <libpkgplan/ownership.h>
 #include <libpkgplan/package_fact.h>
+#include <libpkgstate/package_source_record.h>
 #include <libpkgstate/snapshot.h>
 
 namespace pkgstate::plan_adapter {
 
 /*! \brief Structured reason that installed-state projection failed. */
-enum class projection_error_code {
+enum class projection_error_code : std::uint8_t {
   target_binding_mismatch, //!< Caller target projection does not match state.
   identity_translation,    //!< Identity wire representation was incompatible.
   path_translation,        //!< Canonical path vocabularies were incompatible.
@@ -42,6 +45,21 @@ public:
 private:
   projection_error_code code_;
 };
+
+/*!
+ * \brief Project durable source control into planner candidate control.
+ *
+ * This is the canonical state-to-planner translation for runtime dependencies,
+ * removal lifecycle declarations, and target-profile facts retained by one
+ * package source record.  It does not construct an installed package fact,
+ * inspect a snapshot, or infer any missing source authority.
+ *
+ * \param source Complete durable source authority retained by libpkgstate.
+ * \return Planner-owned candidate control with every representable fact.
+ * \throws projection_error with control_translation when vocabularies differ.
+ */
+[[nodiscard]] PKGSTATE_PLAN_API pkgplan::candidate_control_projection
+project_candidate_control(const package_source_record& source);
 
 /*!
  * \brief Caller-authoritative planner target and its durable state projection.

@@ -91,6 +91,29 @@ void projects_native_installed_state()
       std::int64_t{-1});
 }
 
+void projects_candidate_control_from_durable_source()
+{
+  const pkgstate::snapshot source =
+      native_fixture::state_with_package("example", 20);
+  const pkgstate::package_source_record& control =
+      source.packages().front().control().source();
+
+  const pkgplan::candidate_control_projection projected =
+      pkgstate::plan_adapter::project_candidate_control(control);
+
+  TEST_EQ(projected.runtime_dependencies().size(), std::size_t{1});
+  TEST_EQ(projected.runtime_dependencies().front().expression(), "libfoo");
+  TEST_EQ(projected.removal_lifecycle().size(), std::size_t{1});
+  TEST_EQ(projected.removal_lifecycle().front().phase(),
+          pkgplan::removal_lifecycle_phase::pre_remove);
+  TEST_EQ(projected.removal_lifecycle().front().format(),
+          "text/x-posix-shell");
+  TEST_EQ(projected.target_profile().size(), std::size_t{1});
+  TEST_EQ(projected.target_profile().front().name(),
+          "pkgsource.target-architectures");
+  TEST_EQ(projected.target_profile().front().value(), "x86_64");
+}
+
 void rejects_target_binding_mismatch()
 {
   const pkgstate::snapshot source = native_fixture::state_with_package();
@@ -115,5 +138,6 @@ void rejects_target_binding_mismatch()
 int main()
 {
   projects_native_installed_state();
+  projects_candidate_control_from_durable_source();
   rejects_target_binding_mismatch();
 }

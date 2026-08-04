@@ -143,10 +143,36 @@ std::string architecture_value(
 pkgplan::installed_control_projection translate_control(
     const installed_control& control)
 {
+  const pkgplan::candidate_control_projection candidate =
+      project_candidate_control(control.source());
+
+  pkgplan::installed_control_completeness completeness;
+  completeness.runtime_dependencies =
+      pkgplan::control_fact_availability::known;
+  completeness.removal_lifecycle =
+      pkgplan::control_fact_availability::known;
+  completeness.target_profile = pkgplan::control_fact_availability::known;
+
+  return pkgplan::installed_control_projection(
+      completeness, candidate.runtime_dependencies(),
+      candidate.removal_lifecycle(), candidate.target_profile());
+}
+
+} // namespace
+
+projection_error::projection_error(projection_error_code code,
+                                   std::string message)
+    : std::invalid_argument(std::move(message)), code_(code)
+{
+}
+
+projection_error_code projection_error::code() const noexcept { return code_; }
+
+pkgplan::candidate_control_projection project_candidate_control(
+    const package_source_record& source)
+{
   try
   {
-    const package_source_record& source = control.source();
-
     std::vector<pkgplan::runtime_dependency_declaration> dependencies;
     dependencies.reserve(source.runtime_requirements().size());
     for (const package_requirement& dependency : source.runtime_requirements())
@@ -173,13 +199,8 @@ pkgplan::installed_control_projection translate_control(
         "pkgsource.target-architectures",
         architecture_value(source.architectures().declared_target())));
 
-    pkgplan::installed_control_completeness completeness;
-    completeness.runtime_dependencies = pkgplan::control_fact_availability::known;
-    completeness.removal_lifecycle = pkgplan::control_fact_availability::known;
-    completeness.target_profile = pkgplan::control_fact_availability::known;
-
-    return pkgplan::installed_control_projection(
-        completeness, std::move(dependencies), std::move(lifecycle),
+    return pkgplan::candidate_control_projection(
+        std::move(dependencies), std::move(lifecycle),
         std::move(target_profile));
   }
   catch (const projection_error&)
@@ -194,16 +215,6 @@ pkgplan::installed_control_projection translate_control(
             error.what());
   }
 }
-
-} // namespace
-
-projection_error::projection_error(projection_error_code code,
-                                   std::string message)
-    : std::invalid_argument(std::move(message)), code_(code)
-{
-}
-
-projection_error_code projection_error::code() const noexcept { return code_; }
 
 planning_target_context::planning_target_context(
     pkgplan::target_system_context_identity identity,
