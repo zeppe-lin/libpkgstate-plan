@@ -47,6 +47,7 @@ Both dependencies are public: installed declarations expose `libpkgstate`
 snapshots and `libpkgplan` target/fact types. Source, build, image, and
 application authorities are forbidden.
 
-The implementation body and behavior test are byte-for-byte extractions from
-`libpkgstate` 2.5.1, apart from the independent export annotation in the public
-header.
+The root commit records the exact 2.5.1 implementation and behavior test.
+The independent repository then promoted durable candidate-control projection
+into this sole state-to-planner boundary without rewriting its extraction
+history.
