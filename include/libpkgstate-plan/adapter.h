@@ -38,6 +38,7 @@ class PKGSTATE_PLAN_API projection_error final : public std::invalid_argument {
 public:
   /*! \brief Construct a typed projection failure. */
   projection_error(projection_error_code code, std::string message);
+  ~projection_error() override;
 
   /*! \brief Return the machine-readable failure class. */
   [[nodiscard]] projection_error_code code() const noexcept;
