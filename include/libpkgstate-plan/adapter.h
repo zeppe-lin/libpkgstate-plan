@@ -47,7 +47,10 @@ public:
   /*! \brief Destroy the polymorphic projection failure. */
   ~projection_error() override;
 
-  /*! \brief Return the machine-readable failure class. */
+  /*!
+   * \brief Return the machine-readable failure class.
+  *  \return The machine-readable failure class.
+   */
   [[nodiscard]] projection_error_code code() const noexcept;
 
 private:
@@ -87,11 +90,17 @@ public:
       pkgplan::target_system_context_identity identity,
       state_target_binding state_projection);
 
-  /*! \brief Return the caller-authoritative planner context identity. */
+  /*!
+   * \brief Return the caller-authoritative planner context identity.
+  *  \return The caller-authoritative planner context identity.
+   */
   [[nodiscard]] const pkgplan::target_system_context_identity&
   identity() const noexcept;
 
-  /*! \brief Return the claimed durable state projection. */
+  /*!
+   * \brief Return the claimed durable state projection.
+  *  \return The claimed durable state projection.
+   */
   [[nodiscard]] const state_target_binding&
   state_projection() const noexcept;
 
@@ -111,15 +120,24 @@ private:
  */
 class PKGSTATE_PLAN_API installed_state_projection final {
 public:
-  /*! \brief Return the caller-authoritative complete target context. */
+  /*!
+   * \brief Return the caller-authoritative complete target context.
+  *  \return The caller-authoritative complete target context.
+   */
   [[nodiscard]] const pkgplan::target_system_context_identity&
   target() const noexcept;
 
-  /*! \brief Return installed package facts in package-name order. */
+  /*!
+   * \brief Return installed package facts in package-name order.
+  *  \return Installed package facts in package-name order.
+   */
   [[nodiscard]] const std::vector<pkgplan::installed_package_fact>&
   packages() const noexcept;
 
-  /*! \brief Return the complete installed path-to-owner relation. */
+  /*!
+   * \brief Return the complete installed path-to-owner relation.
+  *  \return The complete installed path-to-owner relation.
+   */
   [[nodiscard]] const pkgplan::installed_ownership_inventory&
   ownership() const noexcept;
 
