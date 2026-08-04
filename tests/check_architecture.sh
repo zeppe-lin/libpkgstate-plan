@@ -12,3 +12,4 @@ if grep -R -F 'libpkgstate-build' "$root/include" "$root/src" "$root/meson.build
 grep -F 'canonical snapshot + caller target context -> planner facts' "$root/docs/architecture.md" >/dev/null || fail 'authority flow is undocumented'
 grep -F "gnu_symbol_visibility: 'hidden'" "$root/src/meson.build" >/dev/null || fail 'hidden visibility is not enforced'
 test -s "$root/abi/libpkgstate-plan.exports" || fail 'reviewed export manifest is absent'
+if grep -R -F 'catch (const std::exception' "$root/src" >/dev/null; then fail 'adapter launders unrelated process failures through std::exception'; fi

@@ -6,7 +6,6 @@
 #include <libpkgplan/control.h>
 #include <libpkgplan/fact_error.h>
 
-#include <exception>
 #include <optional>
 #include <string>
 #include <utility>
@@ -22,7 +21,7 @@ Destination translate_identity(const Source& source)
   {
     return Destination::parse(source.string());
   }
-  catch (const std::exception& error)
+  catch (const pkgplan::digest_error& error)
   {
     throw projection_error(
         projection_error_code::identity_translation,
@@ -37,7 +36,7 @@ pkgplan::package_path translate_path(const package_path& source)
   {
     return pkgplan::package_path::parse(source.string());
   }
-  catch (const std::exception& error)
+  catch (const pkgplan::path_error& error)
   {
     throw projection_error(
         projection_error_code::path_translation,

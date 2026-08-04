@@ -41,6 +41,12 @@ The adapter does not resolve dependencies, compare candidates, produce an
 operation graph, inspect a target filesystem, or mutate state. Projection is
 deterministic for the supplied snapshot and target context.
 
+## Failure translation
+
+Only planner-owned digest, path, and fact refusals are translated into the
+adapter error domain. Allocation, logic, and unrelated runtime failures retain
+their native type. This keeps projection refusal distinct from process failure.
+
 ## Dependency placement
 
 Both dependencies are public: installed declarations expose `libpkgstate`
