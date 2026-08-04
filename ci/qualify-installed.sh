@@ -36,6 +36,6 @@ case $link_mode in
   shared) "$(dirname "$0")/audit-shared-boundary.sh" "$install_prefix/lib/libpkgstate-plan.so.3.0.0" ;;
   static) test -f "$install_prefix/lib/libpkgstate-plan.a" ;;
 esac
-if [ -s "$build_dir/man/pkgstate_plan_adapter.3" ]; then
-  test -s "$install_prefix/share/man/man3/pkgstate_plan_adapter.3"
+if [ -s "$build_dir/man/libpkgstate-plan.3" ]; then
+  test -s "$install_prefix/share/man/man3/libpkgstate-plan.3"
 fi

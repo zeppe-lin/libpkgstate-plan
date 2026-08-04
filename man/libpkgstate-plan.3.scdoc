@@ -1,8 +1,8 @@
-PKGSTATE_PLAN_ADAPTER(3)
+LIBPKGSTATE-PLAN(3)
 
 # NAME
 
-pkgstate_plan_adapter - project native installed state into libpkgplan facts
+libpkgstate-plan - project native installed state into libpkgplan facts
 
 # SYNOPSIS
 

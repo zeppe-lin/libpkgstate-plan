@@ -22,6 +22,7 @@
 #include <libpkgstate/package_source_record.h>
 #include <libpkgstate/snapshot.h>
 
+/*! \brief Durable-state projection into planner-owned fact vocabulary. */
 namespace pkgstate::plan_adapter {
 
 /*! \brief Structured reason that installed-state projection failed. */
@@ -36,8 +37,14 @@ enum class projection_error_code : std::uint8_t {
 /*! \brief Failure to project canonical state into planner-owned fact types. */
 class PKGSTATE_PLAN_API projection_error final : public std::invalid_argument {
 public:
-  /*! \brief Construct a typed projection failure. */
+  /*!
+   * \brief Construct a typed projection failure.
+   * \param code Stable refusal category.
+   * \param message Human-readable diagnostic text.
+   */
   projection_error(projection_error_code code, std::string message);
+
+  /*! \brief Destroy the polymorphic projection failure. */
   ~projection_error() override;
 
   /*! \brief Return the machine-readable failure class. */
@@ -71,7 +78,11 @@ project_candidate_control(const package_source_record& source);
  */
 class PKGSTATE_PLAN_API planning_target_context final {
 public:
-  /*! \brief Bind a planner context to its durable state projection. */
+  /*!
+   * \brief Bind a planner context to its durable state projection.
+   * \param identity Caller-authoritative complete planner target context.
+   * \param state_projection Exact durable state target represented by it.
+   */
   planning_target_context(
       pkgplan::target_system_context_identity identity,
       state_target_binding state_projection);
@@ -113,6 +124,7 @@ public:
   ownership() const noexcept;
 
 private:
+  /*! \brief Construct the projection through project_installed_state(). */
   friend PKGSTATE_PLAN_API installed_state_projection project_installed_state(
       const snapshot&, const planning_target_context&);
 
@@ -134,6 +146,9 @@ private:
  * identity representations and projecting planner-relevant durable control
  * into the matching planner domains.
  *
+ * \param state Complete canonical installed-state snapshot.
+ * \param target Caller-authoritative planner target and matching state binding.
+ * \return Planner-owned package and ownership facts for \p state.
  * \throws projection_error when the target or vocabularies disagree.
  */
 [[nodiscard]] PKGSTATE_PLAN_API installed_state_projection

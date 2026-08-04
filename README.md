@@ -54,6 +54,7 @@ Release after `libpkgstate`, `libpkgimage` 0.4.0, and `libpkgplan` 0.3.0. Releas
 - `docs/integration.md` — composition and release order;
 - `docs/testing.md` — qualification matrix;
 - `docs/abi.md` — ABI and pkg-config policy;
+- `man/libpkgstate-plan.3.scdoc` — installed `libpkgstate-plan.3` interface manual;
 - `MAINTAINING.md` — release gate.
 
 ## License
