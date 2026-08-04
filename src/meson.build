@@ -55,5 +55,8 @@ pkgconf.generate(
   filebase: 'libpkgstate-plan',
   description: 'Projection of native libpkgstate authority into libpkgplan',
   subdirs: '.',
-  requires: [libpkgstate_dep, libpkgplan_dep],
+  requires: [
+    'libpkgstate >= 3.0.0',
+    'libpkgplan >= 0.3.0',
+  ],
 )

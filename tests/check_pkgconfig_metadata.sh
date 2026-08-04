@@ -8,8 +8,14 @@ pc=$build/meson-private/libpkgstate-plan.pc
 grep -F 'Version: 3.0.0' "$pc" >/dev/null
 grep -F -- '-lpkgstate-plan' "$pc" >/dev/null
 public=$(sed -n 's/^Requires:[[:space:]]*//p' "$pc")
-private=$(sed -n 's/^Requires\.private:[[:space:]]*//p' "$pc")
-private_libs=$(sed -n 's/^Libs\.private:[[:space:]]*//p' "$pc")
-printf '%s\n' "$public" | grep -F 'libpkgstate >=3.0.0' >/dev/null || { echo 'pkgconfig-metadata: missing public libpkgstate >=3.0.0' >&2; exit 1; }
-printf '%s\n' "$public" | grep -F 'libpkgplan >=0.3.0' >/dev/null || { echo 'pkgconfig-metadata: missing public libpkgplan >=0.3.0' >&2; exit 1; }
-if printf '%s\n' "$public" | grep -F 'libpkgstate-plan' >/dev/null; then echo 'pkgconfig-metadata: private edge leaked publicly: libpkgstate-plan' >&2; exit 1; fi
+has_requirement() {
+  printf '%s\n' "$1" | tr ',' '\n' | awk \
+    -v package="$2" -v version="$3" '
+      $1 == package && $2 == ">=" && $3 == version { found = 1 }
+      END { exit found ? 0 : 1 }
+    '
+}
+
+has_requirement "$public" libpkgstate 3.0.0 || { echo 'pkgconfig-metadata: missing public libpkgstate >= 3.0.0' >&2; exit 1; }
+has_requirement "$public" libpkgplan 0.3.0 || { echo 'pkgconfig-metadata: missing public libpkgplan >= 0.3.0' >&2; exit 1; }
+if printf '%s\n' "$public" | grep -F 'libpkgstate-plan' >/dev/null; then echo 'pkgconfig-metadata: product dependency leaked publicly' >&2; exit 1; fi
