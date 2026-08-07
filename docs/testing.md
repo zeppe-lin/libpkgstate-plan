@@ -9,3 +9,7 @@ Source contracts verify architecture placement, release metadata, repository hyg
 CI runs GCC and Clang in separate shared and static configurations, one optimized release configuration, and ASan/UBSan configurations. Installation qualification compiles a consumer against staged headers and metadata, checks every installed header, audits the shared boundary or static archive, and verifies installed manual and project documentation.
 
 A release candidate is incomplete until the exact dependency tags used by CI exist and the whole matrix is green from clean build directories.
+
+The documentation contract receives the include roots of the production
+dependencies resolved by Meson before Clang parses public headers. Ambient
+system-installed zoo headers are not accepted as dependency closure.
