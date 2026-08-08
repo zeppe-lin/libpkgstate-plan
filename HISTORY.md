@@ -10,3 +10,5 @@
 - Renamed the installed manual from the former in-tree adapter name to `libpkgstate-plan.3`.
 - Centralized durable source-control projection so downstream adapters do not recreate planner vocabulary.
 - Qualified planner projection against package-source-record protocol version 2 without retired recipe identity.
+- Translated contradictory shared-object planner ownership refusal into the adapter projection-error domain.
+- Split qualification into unit, integration, header, and contract suites with explicit state/planner seam coverage.

@@ -43,8 +43,9 @@ deterministic for the supplied snapshot and target context.
 
 ## Failure translation
 
-Only planner-owned digest, path, and fact refusals are translated into the
-adapter error domain. Allocation, logic, and unrelated runtime failures retain
+Only planner-owned digest, path, object, control, and ownership-inventory
+refusals are translated into the adapter error domain. Allocation, logic, and
+unrelated runtime failures retain
 their native type. This keeps projection refusal distinct from process failure.
 
 ## Dependency placement

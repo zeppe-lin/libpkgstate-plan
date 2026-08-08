@@ -318,12 +318,21 @@ installed_state_projection project_installed_state(
     }
   }
 
-  pkgplan::installed_ownership_inventory ownership(
-      planner_ownership, planner_snapshot,
-      pkgplan::fact_set_completeness::complete, std::move(claims));
-
-  return installed_state_projection(target.identity(), std::move(packages),
-                                    std::move(ownership));
+  try
+  {
+    pkgplan::installed_ownership_inventory ownership(
+        planner_ownership, planner_snapshot,
+        pkgplan::fact_set_completeness::complete, std::move(claims));
+    return installed_state_projection(target.identity(), std::move(packages),
+                                      std::move(ownership));
+  }
+  catch (const pkgplan::fact_error& error)
+  {
+    throw projection_error(
+        projection_error_code::object_translation,
+        std::string("planner ownership vocabulary rejected canonical state: ") +
+            error.what());
+  }
 }
 
 } // namespace pkgstate::plan_adapter
